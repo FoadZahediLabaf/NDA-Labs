@@ -1,113 +1,85 @@
 # Network Data Analysis
 
-A collection of Python notebooks applying data analysis and machine learning to network measurements, traffic classification, device identification, and optical-network performance.
+Python notebooks exploring network measurements, traffic classification, device identification, optical-network regression, and traffic forecasting.
 
 Developed for the **Network Data Analysis** course at **Politecnico di Milano**.
 
-**Python · NumPy · Pandas · scikit-learn · XGBoost · Matplotlib · Jupyter**
+**Python · NumPy · Pandas · scikit-learn · XGBoost · TensorFlow/Keras · Matplotlib · Jupyter**
 
 ## Overview
 
-The repository brings together six coursework topics involving different forms of network data.
+The repository contains six coursework notebooks. Each addresses a networking problem through data preparation, feature extraction, statistical analysis, machine learning, or experimental evaluation.
 
-The notebooks cover data loading, preprocessing, feature extraction, statistical analysis, model training, and evaluation. Each notebook contains the workflow for its corresponding problem.
+The notebooks include source code and saved outputs from earlier executions. Their datasets, dependencies, and execution environments differ.
 
 ## Projects
 
 | Project | Main Focus | Notebook |
 |---|---|---|
-| Active Measurements | Network probing, measurement statistics, and visualization | [Open notebook](Active_Measurements/Active_Measurements.ipynb) |
-| Application Flow Identification | Traffic-feature classification with logistic regression and XGBoost | [Open notebook](Application_flow_identification/Application_flow_identification.ipynb) |
-| MAC De-randomization | Probe-request grouping and device-identification evaluation | [Open notebook](MAC_De-randomization/MAC_De-randomization.ipynb) |
-| QoT Estimation | Optical-network regression and input-uncertainty analysis | [Open notebook](QoT_Estimation/QoT_estimation_v2026.ipynb) |
-| Traffic Prediction | Network traffic prediction coursework | [Open notebook](Traffic_prediction/Traffic_prediction.ipynb) |
-| Website Fingerprinting | Website classification from traffic features | [Open notebook](Website_Fingerprinting/Website_Fingerprinting.ipynb) |
+| Active Measurements | ICMP measurements, IP geolocation, and the relationship between RTT and distance | [Open notebook](Active_Measurements/Active_Measurements.ipynb) |
+| Application Flow Identification | Three-class traffic classification using logistic regression and XGBoost | [Open notebook](Application_flow_identification/Application_flow_identification.ipynb) |
+| MAC De-randomization | Online probe-request clustering and device-count estimation | [Open notebook](MAC_De-randomization/MAC_De-randomization.ipynb) |
+| QoT Estimation | Optical-path SNR regression, modulation margins, and span-length uncertainty | [Open notebook](QoT_Estimation/QoT_estimation_v2026.ipynb) |
+| Traffic Prediction | ANN and LSTM forecasting with a capacity-provisioning cost experiment | [Open notebook](Traffic_prediction/Traffic_prediction.ipynb) |
+| Website Fingerprinting | Packet-trace features, cumulative representations, and k-NN classification | [Open notebook](Website_Fingerprinting/Website_Fingerprinting.ipynb) |
 
 ## 1. Active Measurements
 
-Analysis of network behavior using active measurements and external network information.
+The notebook generates a list of Debian mirror hostnames and studies the relationship between geographical distance and network round-trip time.
 
-The notebook includes:
+Its workflow includes DNS resolution, IP geolocation, repeated ICMP probes, average RTT filtering, geodesic distance calculation, and a linear RTT-distance fit.
 
-- Loading server information.
-- Resolving network addresses.
-- Collecting and processing measurements.
-- Statistical summaries and visualizations.
-- Geographical information processing.
-
-Libraries include Pandas, NumPy, Matplotlib, Requests, GeoPy, and PythonPing.
-
-Some cells perform live network measurements, so outputs can vary with connectivity, endpoint availability, and execution permissions.
+This experiment performs live network requests. Results depend on the execution host, network conditions, target availability, and permissions for ICMP probing.
 
 ## 2. Application Flow Identification
 
-Classification of application traffic using features extracted from network flows.
+Classification of **Skype**, **Dropbox**, and **Google** traffic using traffic-flow features.
 
-The workflow includes:
+The notebook implements data cleaning, feature-distribution plots, stratified train/test splitting, cross-validation for hyperparameter evaluation, and model comparison. Logistic regression uses standardized features; XGBoost uses unscaled features.
 
-- Dataset preparation and feature selection.
-- Exploration of feature distributions.
-- A stratified training/test split.
-- Feature standardization.
-- Hyperparameter evaluation.
-- Logistic regression and XGBoost classification.
-- Accuracy, precision, recall, F1-score, and confusion matrices.
-
-The saved evaluation covers three application classes: **Skype**, **Dropbox**, and **Google**.
+Evaluation includes accuracy, weighted precision/recall/F1, classification reports, and confusion matrices.
 
 ## 3. MAC De-randomization
 
-Investigation of device identification when MAC addresses are randomized.
+Probe requests are processed in timestamp order and assigned to clusters according to a minimum number of matching features.
 
-The notebook processes probe-request observations, groups related records, and evaluates how well the resulting groups correspond to device identities.
+The notebook compares feature-match thresholds on the lecture dataset, applies the selected threshold to challenge subsets containing different numbers of devices, and estimates the number of device clusters in an unlabeled dataset.
 
-The analysis includes similarity-based grouping and clustering evaluation using V-measure.
+Evaluation includes V-measure, majority-label disagreement, and the number of clusters produced.
 
 ## 4. Quality of Transmission Estimation
 
-Prediction of optical-network Signal-to-Noise Ratio using network-related features.
+Prediction of optical-path SNR using features describing fiber spans, path length, and interference conditions.
 
-The notebook compares:
+The notebook compares linear regression with a multilayer perceptron. It explores SGD and Adam optimization, feature selection, modulation-format margins, and the effect of uncertain span lengths on prediction accuracy.
 
-- A linear-regression baseline.
-- A multilayer perceptron implemented with `MLPRegressor`.
-
-It also examines feature selection, prediction-error distributions, and the effect of uncertain fiber span lengths on the required safety margin.
-
-### Recorded Test Results
-
-The saved outputs for the corresponding full-feature experiment report:
-
-| Model | Test R² | Test MSE |
-|---|---:|---:|
-| Linear Regression | 0.901 | 0.443 |
-| Neural Network | 0.974 | 0.114 |
-
-These values refer to the dataset split and settings used in the notebook. The predictions are expressed in dB, so the squared-error metric has units of dB².
-
-The notebook also evaluates reduced-feature models and uncertainty levels of 5%, 10%, and 15% of the maximum span length.
+Evaluation uses regression metrics and prediction-error distributions, with additional analysis of input uncertainty and modulation decisions.
 
 ## 5. Traffic Prediction
 
-The traffic prediction notebook contains the coursework analysis for this topic.
+Forecasting hourly telecom traffic for spatial cells in Milan using November–December 2013 data.
 
-Its data-loading cells, methodology, and saved outputs are available in:
+The notebook compares:
 
-```text
-Traffic_prediction/Traffic_prediction.ipynb
-```
+- A feed-forward artificial neural network using calendar and lagged-traffic features.
+- An LSTM using sequences of past traffic observations.
+
+The workflow includes hourly aggregation, feature preparation, chronological train/test splitting, normalization, and a temporal gap in the LSTM split.
+
+Evaluation includes MSE, MAE, R², prediction plots, and an over-/under-provisioning cost experiment with different cost weights.
 
 ## 6. Website Fingerprinting
 
-Classification of websites using features extracted from network traffic traces.
+Classification of websites from captured TCP/443 traffic.
 
-The notebook includes:
+The notebook collects traces with `tcpdump` and `curl`, extracts packet fields with `tshark`, and compares two feature representations:
 
-- Traffic trace processing.
-- Feature extraction and preprocessing.
-- Label encoding and feature scaling.
-- K-nearest-neighbor classification.
-- Accuracy and confusion-matrix analysis.
+- Bidirectional packet-size, volume, and inter-arrival-time statistics.
+- An interpolated representation of cumulative signed packet sizes.
+
+It compares k-NN settings, plots confusion matrices, and evaluates the selected statistical-feature classifier on a separately collected follow-up capture set. The notebook notes that this follow-up was collected a few hours after the original captures.
+
+The capture cells assume a Linux-style environment, including `apt-get` and the `eth0` interface.
 
 ## Repository Structure
 
@@ -129,28 +101,32 @@ NDA-Labs/
     └── Website_Fingerprinting.ipynb
 ```
 
-## Getting Started
+## Environment Setup
 
-### Local Jupyter Environment
+### Common Analysis Libraries
 
 ```bash
 git clone https://github.com/FoadZahediLabaf/NDA-Labs.git
 cd NDA-Labs
-
 python3 -m venv .venv
 source .venv/bin/activate
-
 python -m pip install jupyter numpy pandas matplotlib scikit-learn xgboost
 jupyter notebook
 ```
 
-On Windows PowerShell:
+On Windows PowerShell, activate the environment with:
 
 ```powershell
 .venv\Scripts\Activate.ps1
 ```
 
-The command above installs the common analysis libraries. Individual notebooks may require additional dependencies.
+### Notebook-Specific Requirements
+
+| Notebook | Additional requirements |
+|---|---|
+| Active Measurements | `requests`, `geopy`, `pythonping`; network access and ICMP permissions |
+| Traffic Prediction | TensorFlow/Keras; model plotting uses `plot_model` and its visualization dependencies |
+| Website Fingerprinting | `tcpdump`, `tshark`, `curl`, packet-capture permissions, and an appropriate network interface; its setup cell also installs Seaborn |
 
 For active measurements:
 
@@ -158,48 +134,39 @@ For active measurements:
 python -m pip install requests geopy pythonping
 ```
 
-The website fingerprinting notebook also includes a Seaborn installation cell.
+For traffic prediction, install TensorFlow in a supported Python environment. The repository does not pin a complete shared dependency environment.
 
-### Google Colab
+## Data Requirements
 
-The notebooks can also be opened in Google Colab.
-
-Upload or connect the required datasets, adjust file paths where necessary, and follow the notebook's dependency and execution cells.
-
-## Data and Execution
-
-The notebooks use different datasets and working-directory assumptions.
-
-Before running one:
-
-1. Inspect its imports and data-loading cells.
-2. Identify the required files and expected directory structure.
-3. Supply any external coursework data.
-4. Set the notebook's working directory or update its input paths.
-5. Run the cells in order.
-
-The QoT directory includes the two SNR text files used by its notebook. Other notebooks reference inputs that are not bundled as a complete dataset collection.
-
-## Evaluation
-
-The notebooks use metrics appropriate to their tasks:
-
-| Task | Evaluation |
+| Notebook | Input location or generation |
 |---|---|
-| Classification | Accuracy, precision, recall, F1-score, confusion matrices |
-| Regression | R², mean squared error, maximum error |
-| Device grouping | V-measure |
-| Network measurements | Statistical summaries and visualizations |
+| Active Measurements | Creates `servers.csv` in its first cell and collects live measurements |
+| Application Flow Identification | Requires external `22_apps_flow_features.csv` |
+| MAC De-randomization | References `/content/lecture_dataset`, `/content/challenge_dataset`, and `/content/MAC_derand_unlabelled-challenge.csv` |
+| QoT Estimation | Includes two SNR text files; the current code loads `SNR_dataset_0.25dB_per_km.txt` |
+| Traffic Prediction | Requires external `dataset/short_milan_processed_2013-MM-DD.txt` files |
+| Website Fingerprinting | Generates `csv_captures/` and `csv_captures_day2/` through its capture cells |
 
-Saved outputs document previous executions. Reproducing a result requires the corresponding input data, preprocessing, model settings, and library environment.
+Set the working directory and input paths for the notebook being used. For QoT, run with the `QoT_Estimation` directory as the working directory or update the dataset paths.
 
-## Author and Academic Context
+Google Colab can be used where the notebook's dependencies, input files, and network capabilities are available.
+
+## Execution Notes
+
+Saved outputs reflect earlier executions and can vary with data, configuration, and execution conditions. Each notebook has its own setup requirements.
+
+Two initialization issues need attention before a fresh Run All:
+
+- **Application Flow Identification:** call `create_dataset(DATASET_FILE, APP_NAMES)` and assign its return value to `homework_dataset_file` before the feature-distribution cell.
+- **QoT Estimation:** the standalone `new_y = np.array(new_snr_values)` cell appears before `new_snr_values` is loaded; the following cell already performs this initialization in the correct order.
+
+## Academic Context
+
+The exercises and notebook scaffolding originate from the course. This repository contains my implemented coursework solutions and analyses.
+
+## Author
 
 **Foad Zahedi Labaf**
-
-MSc student in Computer Science and Engineering at Politecnico di Milano.
-
-The exercises and notebook scaffolding originate from the course. The repository contains my implemented coursework solutions and analyses.
 
 ## Copyright
 
