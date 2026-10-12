@@ -4,6 +4,27 @@ This repository contains my Python notebooks and coursework solutions for the **
 
 The work focuses on applying data analysis and machine learning techniques to networking-related problems. The assignments cover data preprocessing, feature extraction, visualization, supervised learning, clustering, regression, and performance evaluation.
 
+## Start here
+
+| Project | Focus | Notebook |
+|---|---|---|
+| Optical-network QoT estimation | Neural-network regression, a linear baseline, and input uncertainty | [QoT estimation](QoT_Estimation/QoT_estimation_v2026.ipynb) |
+| Application flow identification | Feature engineering, logistic regression, and XGBoost | [Flow classification](Application_flow_identification/Application_flow_identification.ipynb) |
+| Traffic prediction | Network traffic prediction coursework | [Traffic prediction](Traffic_prediction/Traffic_prediction.ipynb) |
+| MAC de-randomization | Grouping probe requests and device identification | [MAC analysis](MAC_De-randomization/MAC_De-randomization.ipynb) |
+| Active measurements | Network measurement statistics and visualization | [Active measurements](Active_Measurements/Active_Measurements.ipynb) |
+| Website fingerprinting | Traffic features and classification | [Website fingerprinting](Website_Fingerprinting/Website_Fingerprinting.ipynb) |
+
+### Example result: QoT regression
+
+Saved notebook outputs report **test R² = 0.974** for the neural-network model, compared with **0.901** for the linear-regression baseline in the corresponding experiment. These are results from that notebook's dataset split and configuration, separate from the private EDFA project. See the notebook's code and outputs for the experiment details and input-uncertainty analysis.
+
+## Running the notebooks
+
+Open the linked notebooks in Jupyter or Google Colab. Dependencies vary by notebook and include NumPy, Pandas, Matplotlib, scikit-learn, and XGBoost for flow classification.
+
+Some notebooks require external coursework data and local input paths. The QoT folder includes two SNR text files; other required datasets may need to be supplied separately. Check the data-loading cells before running. This coursework collection does not have a single automated setup command.
+
 ## Repository Structure
 
 ```text
@@ -12,6 +33,7 @@ The work focuses on applying data analysis and machine learning techniques to ne
 ├── Application_flow_identification/
 ├── MAC_De-randomization/
 ├── QoT_Estimation/
+├── Traffic_prediction/
 └── Website_Fingerprinting/
 ```
 
@@ -88,9 +110,10 @@ Main libraries used across the repository include:
 - Pandas
 - Matplotlib
 - Scikit-learn
+- XGBoost (flow classification)
 
 ## Note
 
-This repository contains only my own coursework code and solutions.
+This repository contains coursework solutions. Notebook scaffolding and exercises originate from the course; the implemented solutions and analyses are my work.
 
-Course-provided datasets, slides, and lab material are not included.
+The QoT directory contains SNR data files used by its notebook. Other course datasets and external material are not bundled as a complete runnable dataset collection.
