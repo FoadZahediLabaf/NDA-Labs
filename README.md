@@ -1,119 +1,208 @@
-# Network Data Analysis Coursework
+# Network Data Analysis
 
-This repository contains my Python notebooks and coursework solutions for the **Network Data Analysis** course at Politecnico di Milano.
+A collection of Python notebooks applying data analysis and machine learning to network measurements, traffic classification, device identification, and optical-network performance.
 
-The work focuses on applying data analysis and machine learning techniques to networking-related problems. The assignments cover data preprocessing, feature extraction, visualization, supervised learning, clustering, regression, and performance evaluation.
+Developed for the **Network Data Analysis** course at **Politecnico di Milano**.
 
-## Start here
+**Python · NumPy · Pandas · scikit-learn · XGBoost · Matplotlib · Jupyter**
 
-| Project | Focus | Notebook |
+## Overview
+
+The repository brings together six coursework topics involving different forms of network data.
+
+The notebooks cover data loading, preprocessing, feature extraction, statistical analysis, model training, and evaluation. Each notebook contains the workflow for its corresponding problem.
+
+## Projects
+
+| Project | Main Focus | Notebook |
 |---|---|---|
-| Optical-network QoT estimation | Neural-network regression, a linear baseline, and input uncertainty | [QoT estimation](QoT_Estimation/QoT_estimation_v2026.ipynb) |
-| Application flow identification | Feature engineering, logistic regression, and XGBoost | [Flow classification](Application_flow_identification/Application_flow_identification.ipynb) |
-| Traffic prediction | Network traffic prediction coursework | [Traffic prediction](Traffic_prediction/Traffic_prediction.ipynb) |
-| MAC de-randomization | Grouping probe requests and device identification | [MAC analysis](MAC_De-randomization/MAC_De-randomization.ipynb) |
-| Active measurements | Network measurement statistics and visualization | [Active measurements](Active_Measurements/Active_Measurements.ipynb) |
-| Website fingerprinting | Traffic features and classification | [Website fingerprinting](Website_Fingerprinting/Website_Fingerprinting.ipynb) |
+| Active Measurements | Network probing, measurement statistics, and visualization | [Open notebook](Active_Measurements/Active_Measurements.ipynb) |
+| Application Flow Identification | Traffic-feature classification with logistic regression and XGBoost | [Open notebook](Application_flow_identification/Application_flow_identification.ipynb) |
+| MAC De-randomization | Probe-request grouping and device-identification evaluation | [Open notebook](MAC_De-randomization/MAC_De-randomization.ipynb) |
+| QoT Estimation | Optical-network regression and input-uncertainty analysis | [Open notebook](QoT_Estimation/QoT_estimation_v2026.ipynb) |
+| Traffic Prediction | Network traffic prediction coursework | [Open notebook](Traffic_prediction/Traffic_prediction.ipynb) |
+| Website Fingerprinting | Website classification from traffic features | [Open notebook](Website_Fingerprinting/Website_Fingerprinting.ipynb) |
 
-### Example result: QoT regression
+## 1. Active Measurements
 
-Saved notebook outputs report **test R² = 0.974** for the neural-network model, compared with **0.901** for the linear-regression baseline in the corresponding experiment. These are results from that notebook's dataset split and configuration, separate from the private EDFA project. See the notebook's code and outputs for the experiment details and input-uncertainty analysis.
+Analysis of network behavior using active measurements and external network information.
 
-## Running the notebooks
+The notebook includes:
 
-Open the linked notebooks in Jupyter or Google Colab. Dependencies vary by notebook and include NumPy, Pandas, Matplotlib, scikit-learn, and XGBoost for flow classification.
+- Loading server information.
+- Resolving network addresses.
+- Collecting and processing measurements.
+- Statistical summaries and visualizations.
+- Geographical information processing.
 
-Some notebooks require external coursework data and local input paths. The QoT folder includes two SNR text files; other required datasets may need to be supplied separately. Check the data-loading cells before running. This coursework collection does not have a single automated setup command.
+Libraries include Pandas, NumPy, Matplotlib, Requests, GeoPy, and PythonPing.
+
+Some cells perform live network measurements, so outputs can vary with connectivity, endpoint availability, and execution permissions.
+
+## 2. Application Flow Identification
+
+Classification of application traffic using features extracted from network flows.
+
+The workflow includes:
+
+- Dataset preparation and feature selection.
+- Exploration of feature distributions.
+- A stratified training/test split.
+- Feature standardization.
+- Hyperparameter evaluation.
+- Logistic regression and XGBoost classification.
+- Accuracy, precision, recall, F1-score, and confusion matrices.
+
+The saved evaluation covers three application classes: **Skype**, **Dropbox**, and **Google**.
+
+## 3. MAC De-randomization
+
+Investigation of device identification when MAC addresses are randomized.
+
+The notebook processes probe-request observations, groups related records, and evaluates how well the resulting groups correspond to device identities.
+
+The analysis includes similarity-based grouping and clustering evaluation using V-measure.
+
+## 4. Quality of Transmission Estimation
+
+Prediction of optical-network Signal-to-Noise Ratio using network-related features.
+
+The notebook compares:
+
+- A linear-regression baseline.
+- A multilayer perceptron implemented with `MLPRegressor`.
+
+It also examines feature selection, prediction-error distributions, and the effect of uncertain fiber span lengths on the required safety margin.
+
+### Recorded Test Results
+
+The saved outputs for the corresponding full-feature experiment report:
+
+| Model | Test R² | Test MSE |
+|---|---:|---:|
+| Linear Regression | 0.901 | 0.443 |
+| Neural Network | 0.974 | 0.114 |
+
+These values refer to the dataset split and settings used in the notebook. The predictions are expressed in dB, so the squared-error metric has units of dB².
+
+The notebook also evaluates reduced-feature models and uncertainty levels of 5%, 10%, and 15% of the maximum span length.
+
+## 5. Traffic Prediction
+
+The traffic prediction notebook contains the coursework analysis for this topic.
+
+Its data-loading cells, methodology, and saved outputs are available in:
+
+```text
+Traffic_prediction/Traffic_prediction.ipynb
+```
+
+## 6. Website Fingerprinting
+
+Classification of websites using features extracted from network traffic traces.
+
+The notebook includes:
+
+- Traffic trace processing.
+- Feature extraction and preprocessing.
+- Label encoding and feature scaling.
+- K-nearest-neighbor classification.
+- Accuracy and confusion-matrix analysis.
 
 ## Repository Structure
 
 ```text
-.
+NDA-Labs/
 ├── Active_Measurements/
+│   └── Active_Measurements.ipynb
 ├── Application_flow_identification/
+│   └── Application_flow_identification.ipynb
 ├── MAC_De-randomization/
+│   └── MAC_De-randomization.ipynb
 ├── QoT_Estimation/
+│   ├── QoT_estimation_v2026.ipynb
+│   ├── SNR_dataset_0.2dB_per_km.txt
+│   └── SNR_dataset_0.25dB_per_km.txt
 ├── Traffic_prediction/
+│   └── Traffic_prediction.ipynb
 └── Website_Fingerprinting/
+    └── Website_Fingerprinting.ipynb
 ```
 
-## Assignments
+## Getting Started
 
-### Active Measurements
+### Local Jupyter Environment
 
-This assignment focuses on the analysis of network measurements collected through active probing. The code processes measurement data, extracts useful statistics, and visualizes network behavior in order to better understand performance-related characteristics.
+```bash
+git clone https://github.com/FoadZahediLabaf/NDA-Labs.git
+cd NDA-Labs
 
-Main topics covered:
+python3 -m venv .venv
+source .venv/bin/activate
 
-- Active network measurements
-- Data preprocessing
-- Statistical analysis
-- Visualization of network metrics
+python -m pip install jupyter numpy pandas matplotlib scikit-learn xgboost
+jupyter notebook
+```
 
-### Application Flow Identification
+On Windows PowerShell:
 
-This assignment applies machine learning methods to classify application flows using traffic-level features. The workflow includes dataset cleaning, feature preparation, model training, and evaluation of classification performance.
+```powershell
+.venv\Scripts\Activate.ps1
+```
 
-Main topics covered:
+The command above installs the common analysis libraries. Individual notebooks may require additional dependencies.
 
-- Network traffic flow analysis
-- Feature extraction and preprocessing
-- Supervised learning
-- Multi-class classification
-- Model evaluation
+For active measurements:
 
-### MAC De-randomization
+```bash
+python -m pip install requests geopy pythonping
+```
 
-This assignment studies the problem of recognizing devices when MAC address randomization is used. The implemented solution follows a clustering-based approach to group similar probe requests and evaluate how accurately they can be associated with the same device.
+The website fingerprinting notebook also includes a Seaborn installation cell.
 
-Main topics covered:
+### Google Colab
 
-- MAC address randomization
-- Probe request analysis
-- Similarity-based clustering
-- Online grouping of observations
-- Clustering performance evaluation
+The notebooks can also be opened in Google Colab.
 
-### QoT Estimation
+Upload or connect the required datasets, adjust file paths where necessary, and follow the notebook's dependency and execution cells.
 
-This assignment focuses on Quality of Transmission estimation in optical networks. Machine learning models are trained to predict the Signal-to-Noise Ratio of lightpaths using network-related features. The final part studies how uncertainty in fiber span length affects prediction accuracy and the required safety margin.
+## Data and Execution
 
-Main topics covered:
+The notebooks use different datasets and working-directory assumptions.
 
-- Optical network QoT estimation
-- Feature engineering
-- Neural network regression
-- Linear regression baseline
-- Prediction error analysis
-- Safety margin evaluation
-- Impact of uncertain input features
+Before running one:
 
-### Website Fingerprinting
+1. Inspect its imports and data-loading cells.
+2. Identify the required files and expected directory structure.
+3. Supply any external coursework data.
+4. Set the notebook's working directory or update its input paths.
+5. Run the cells in order.
 
-This assignment explores traffic classification for website fingerprinting. The code analyzes network traffic traces and extracts features that can be used to identify traffic patterns through machine learning techniques.
+The QoT directory includes the two SNR text files used by its notebook. Other notebooks reference inputs that are not bundled as a complete dataset collection.
 
-Main topics covered:
+## Evaluation
 
-- Network traffic analysis
-- Website fingerprinting
-- Feature extraction from traffic traces
-- Classification workflow
-- Performance evaluation
+The notebooks use metrics appropriate to their tasks:
 
-## Technologies Used
+| Task | Evaluation |
+|---|---|
+| Classification | Accuracy, precision, recall, F1-score, confusion matrices |
+| Regression | R², mean squared error, maximum error |
+| Device grouping | V-measure |
+| Network measurements | Statistical summaries and visualizations |
 
-The assignments are implemented mainly in Python using Jupyter and Google Colab notebooks.
+Saved outputs document previous executions. Reproducing a result requires the corresponding input data, preprocessing, model settings, and library environment.
 
-Main libraries used across the repository include:
+## Author and Academic Context
 
-- NumPy
-- Pandas
-- Matplotlib
-- Scikit-learn
-- XGBoost (flow classification)
+**Foad Zahedi Labaf**
 
-## Note
+MSc student in Computer Science and Engineering at Politecnico di Milano.
 
-This repository contains coursework solutions. Notebook scaffolding and exercises originate from the course; the implemented solutions and analyses are my work.
+The exercises and notebook scaffolding originate from the course. The repository contains my implemented coursework solutions and analyses.
 
-The QoT directory contains SNR data files used by its notebook. Other course datasets and external material are not bundled as a complete runnable dataset collection.
+## Copyright
+
+© 2026 Foad Zahedi Labaf. All rights reserved.
+
+Third-party materials remain subject to their original licenses and terms.
